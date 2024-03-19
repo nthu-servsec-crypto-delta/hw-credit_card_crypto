@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# DoubleTranspositionCipher module
 module DoubleTranspositionCipher
   # Encrypts document using key
   # Arguments:
@@ -16,7 +19,7 @@ module DoubleTranspositionCipher
     matrix = to_matrix(document, size)
 
     key2 = Random.new(key).rand(key)
-    
+
     matrix.shuffle!(random: Random.new(key))
     matrix.each do |row|
       row.shuffle!(random: Random.new(key2))
@@ -34,14 +37,12 @@ module DoubleTranspositionCipher
     size = Math.sqrt(ciphertext.length).ceil
     matrix = ciphertext.chars.each_slice(size).to_a
 
-    key2 = Random.new(key).rand(key)
+    key_map = gen_keymap(key, size)
+    key2_map = gen_keymap(Random.new(key).rand(key), size)
 
-    key_map = (0...size).to_a.shuffle!(random: Random.new(key)) 
-    key2_map = (0...size).to_a.shuffle!(random: Random.new(key2)) 
-
-    matrix.sort_by!.with_index { |_, i| key_map[i] }
+    unshuffle(matrix, key_map)
     matrix.each do |row|
-      row.sort_by!.with_index { |_, i| key2_map[i] }
+      unshuffle(row, key2_map)
     end
     matrix.map(&:join).join.strip
   end
@@ -49,5 +50,13 @@ module DoubleTranspositionCipher
   def self.to_matrix(document, size, padding = 0.chr)
     document << padding * (-document.length % (size * size))
     document.chars.each_slice(size).to_a
+  end
+
+  def self.gen_keymap(key, size)
+    (0...size).to_a.shuffle!(random: Random.new(key))
+  end
+
+  def self.unshuffle(arr, keymap)
+    arr.sort_by!.with_index { |_, i| keymap[i] }
   end
 end
