@@ -18,7 +18,7 @@ module DoubleTranspositionCipher
     size = Math.sqrt(document.length).ceil
     matrix = to_matrix(document, size)
 
-    key2 = Random.new(key).rand(key)
+    key2 = next_key(key)
 
     matrix.shuffle!(random: Random.new(key))
     matrix.each do |row|
@@ -38,13 +38,17 @@ module DoubleTranspositionCipher
     matrix = ciphertext.chars.each_slice(size).to_a
 
     key_map = gen_keymap(key, size)
-    key2_map = gen_keymap(Random.new(key).rand(key), size)
+    key2_map = gen_keymap(next_key(key), size)
 
     unshuffle(matrix, key_map)
     matrix.each do |row|
       unshuffle(row, key2_map)
     end
     matrix.map(&:join).join.strip
+  end
+
+  def self.next_key(key)
+    Random.new(key).rand(key)
   end
 
   def self.to_matrix(document, size, padding = 0.chr)
