@@ -12,45 +12,25 @@ describe 'Test card info encryption' do
     @key = 3
   end
 
-  describe 'Using Caesar cipher' do
-    it 'should encrypt card information' do
-      enc = SubstitutionCipher::Caesar.encrypt(@cc.to_s, @key)
-      _(enc).wont_equal @cc.to_s
-      _(enc).wont_be_nil
-    end
+  @testcases = {
+    Caesar: SubstitutionCipher::Caesar,
+    Permutation: SubstitutionCipher::Permutation,
+    DoubleTransposition: DoubleTranspositionCipher
+  }
 
-    it 'should decrypt text' do
-      enc = SubstitutionCipher::Caesar.encrypt(@cc.to_s, @key)
-      dec = SubstitutionCipher::Caesar.decrypt(enc, @key)
-      _(dec).must_equal @cc.to_s
-    end
-  end
+  @testcases.each do |name, mod|
+    describe "Using #{name} cipher" do
+      it 'should encrypt card information' do
+        enc = mod.encrypt(@cc.to_s, @key)
+        _(enc).wont_equal @cc.to_s
+        _(enc).wont_be_nil
+      end
 
-  describe 'Using Permutation cipher' do
-    it 'should encrypt card information' do
-      enc = SubstitutionCipher::Permutation.encrypt(@cc.to_s, @key)
-      _(enc).wont_equal @cc.to_s
-      _(enc).wont_be_nil
-    end
-
-    it 'should decrypt text' do
-      enc = SubstitutionCipher::Permutation.encrypt(@cc.to_s, @key)
-      dec = SubstitutionCipher::Permutation.decrypt(enc, @key)
-      _(dec).must_equal @cc.to_s
-    end
-  end
-
-  describe 'Using Double transposition cipher' do
-    it 'should encrypt card information' do
-      enc = DoubleTranspositionCipher.encrypt(@cc.to_s, @key)
-      _(enc).wont_equal @cc.to_s
-      _(enc).wont_be_nil
-    end
-
-    it 'should decrypt text' do
-      enc = DoubleTranspositionCipher.encrypt(@cc.to_s, @key)
-      dec = DoubleTranspositionCipher.decrypt(enc, @key)
-      _(dec).must_equal @cc.to_s
+      it 'should decrypt text' do
+        enc = mod.encrypt(@cc.to_s, @key)
+        dec = mod.decrypt(enc, @key)
+        _(dec).must_equal @cc.to_s
+      end
     end
   end
 end
