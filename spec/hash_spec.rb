@@ -59,11 +59,13 @@ describe 'Test hashing requirements' do
       # Check that each card produces the same hash if hashed repeatedly
       it 'should produce the same hash if hashed repeatedly' do
         cards.each do |card|
-          hash = card.hash
+          hash = card.hash_secure
           _(hash).wont_be_nil
+          _(hash.length).must_equal(64) # SHA256 produces a 64-character hash
 
-          hash2 = card.hash
+          hash2 = card.hash_secure
           _(hash2).wont_be_nil
+          _(hash2.length).must_equal(64) # SHA256 produces a 64-character hash
 
           assert_equal hash, hash2
         end
