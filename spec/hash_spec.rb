@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../credit_card'
 require 'minitest/autorun'
 
@@ -24,25 +26,76 @@ end
 describe 'Test hashing requirements' do
   describe 'Test regular hashing' do
     describe 'Check hashes are consistently produced' do
-      # TODO: Check that each card produces the same hash if hashed repeatedly
+      # Check that each card produces the same hash if hashed repeatedly
+      it 'should produce the same hash if hashed repeatedly' do
+        cards.each do |card|
+          hash = card.hash
+          _(hash).wont_be_nil
+
+          hash2 = card.hash
+          _(hash2).wont_be_nil
+
+          assert_equal hash, hash2
+        end
+      end
     end
 
     describe 'Check for unique hashes' do
-      # TODO: Check that each card produces a different hash than other cards
+      # Check that each card produces a different hash than other cards
+      it 'should produce a different hash than other cards' do
+        cards.each_with_index do |card, i|
+          cards.each_with_index do |card2, j|
+            next if i >= j
+
+            refute_equal card.hash, card2.hash
+          end
+        end
+      end
     end
   end
 
   describe 'Test cryptographic hashing' do
     describe 'Check hashes are consistently produced' do
-      # TODO: Check that each card produces the same hash if hashed repeatedly
+      # Check that each card produces the same hash if hashed repeatedly
+      it 'should produce the same hash if hashed repeatedly' do
+        cards.each do |card|
+          hash = card.hash
+          _(hash).wont_be_nil
+
+          hash2 = card.hash
+          _(hash2).wont_be_nil
+
+          assert_equal hash, hash2
+        end
+      end
     end
 
     describe 'Check for unique hashes' do
-      # TODO: Check that each card produces a different hash than other cards
+      # Check that each card produces a different hash than other cards
+      it 'should produce a different hash than other cards' do
+        cards.each_with_index do |card, i|
+          cards.each_with_index do |card2, j|
+            next if i >= j
+
+            refute_equal card.hash_secure, card2.hash_secure
+          end
+        end
+      end
     end
 
     describe 'Check regular hash not same as cryptographic hash' do
-      # TODO: Check that each card's hash is different from its hash_secure
+      # Check that each card's hash is different from its hash_secure
+      it 'should produce a different hash than hash_secure' do
+        cards.each do |card|
+          hash = card.hash
+          _(hash).wont_be_nil
+
+          hash_secure = card.hash_secure
+          _(hash_secure).wont_be_nil
+
+          refute_equal hash, hash_secure
+        end
+      end
     end
   end
 end
