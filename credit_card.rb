@@ -36,17 +36,15 @@ class CreditCard
   end
 
   # return a new CreditCard object given a serialized (JSON) representation
+  # Arguments:
+  #   card_s: a JSON string
+  # Returns: a CreditCard object
   def self.from_s(card_s)
-    #   - input: a JSON string
-    #   - output: a CreditCard object
     JSON.parse(card_s)
   end
 
   # return a hash of the serialized credit card object
   def hash
-    #   - Produce a hash (using default hash method) of the credit card's
-    #     serialized contents.
-    #   - Credit cards with identical information should produce the same hash
     to_json.hash
   end
 
