@@ -6,3 +6,4 @@ gem 'minitest'
 
 gem 'bundle-audit'
 gem 'rubocop'
+gem 'rbnacl'
