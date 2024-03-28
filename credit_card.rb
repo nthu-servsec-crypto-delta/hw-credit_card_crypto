@@ -3,6 +3,8 @@
 require_relative './luhn_validator'
 require 'json'
 
+require 'rbnacl'
+
 # CreditCard class
 class CreditCard
   # TODO: mixin the LuhnValidator using an 'include' statement
@@ -50,9 +52,6 @@ class CreditCard
 
   # return a cryptographically secure hash
   def hash_secure
-    #   - Use sha256 to create a cryptographically secure hash.
-    #   - Credit cards with identical information should produce the same hash
-    require 'digest'
-    Digest::SHA256.hexdigest(to_json)
+    RbNaCl::Hash.sha256(to_json)
   end
 end

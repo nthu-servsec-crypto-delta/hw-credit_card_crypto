@@ -61,11 +61,11 @@ describe 'Test hashing requirements' do
         cards.each do |card|
           hash = card.hash_secure
           _(hash).wont_be_nil
-          _(hash.length).must_equal(64) # SHA256 produces a 64-character hash
+          _(hash.length).must_equal(32) # SHA256 produces a 32-byte hash
 
           hash2 = card.hash_secure
           _(hash2).wont_be_nil
-          _(hash2.length).must_equal(64) # SHA256 produces a 64-character hash
+          _(hash2.length).must_equal(32) # SHA256 produces a 32-byte hash
 
           assert_equal hash, hash2
         end
